@@ -11,7 +11,7 @@
         android:icon="@drawable/spectrum_icon"
         android:label="@string/app_name" >
         <activity
-            android:name=".Audalyzer"
+            android:name="org.hermit.audalyzer.Audalyzer"
             android:screenOrientation="landscape"
             android:configChanges="mcc|mnc|touchscreen|keyboard|keyboardHidden|navigation|orientation|screenLayout"
             android:label="@string/app_name"
