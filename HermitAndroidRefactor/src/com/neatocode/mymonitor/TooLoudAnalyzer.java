@@ -11,7 +11,7 @@ public class TooLoudAnalyzer implements Analyzer {
 
 	private static final String TAG = "TooLoudAnalyzer";
 
-	private static final float TOO_LOUD = -40f;
+	private static final float TOO_LOUD = -20f;
 
 	private static TooLoudAnalyzer instance = new TooLoudAnalyzer();
 
