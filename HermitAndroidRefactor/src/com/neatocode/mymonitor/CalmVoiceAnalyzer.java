@@ -19,6 +19,8 @@ public class CalmVoiceAnalyzer implements Analyzer {
 
 	private static final float MAX_FREQ = 4000;
 
+	private static final float SILENCE_THRESHOLD = -40f;
+	
 	private static final float FREQ_RANGE = MAX_FREQ - MIN_FREQ;
 
 	private static final CalmVoiceAnalyzer instance = new CalmVoiceAnalyzer();
@@ -26,17 +28,30 @@ public class CalmVoiceAnalyzer implements Analyzer {
 	private float[] calibrationData;
 
 	private Float averageLoudestTone = null;
+	
+	private long averageLoudestToneSamples;
 
 	private Float currentLoudestTone = null;
+	
+	private Float currentVolume = null;
 
 	public synchronized static CalmVoiceAnalyzer getInstance() {
 		return instance;
+	}
+	
+	public synchronized void setPower(float power) {
+		if (Float.isInfinite(power) || Float.isNaN(power)) {
+			return;
+		}
+
+		Log.i(TAG, "setPower: " + power);
+		currentVolume = power;
 	}
 
 	public synchronized void setData(float[] data) {
 		Log.i(TAG, "setData");
 
-		if (null == data) {
+		if (null == data || null == currentVolume || currentVolume < SILENCE_THRESHOLD) {
 			return;
 		}
 
@@ -52,6 +67,13 @@ public class CalmVoiceAnalyzer implements Analyzer {
 		Integer loudestFreqIndex = null;
 		Float loudestFreqLog = null;
 		for (int i = 1; i < data.length; i++) {
+
+			// Try to ignore anything outside human voice range.
+			final float freq = freqPerBucket * i;
+			if ( freq < 70 || freq > 1500) {
+				continue;
+			}
+			
 			float point = data[i];
 			float calibrationPoint = calibrationData[i];
 
@@ -83,12 +105,14 @@ public class CalmVoiceAnalyzer implements Analyzer {
 			}
 		}
 
-		final float loudestFreq = (loudestFreqIndex + freqPerBucket);
+		final float loudestFreq = (loudestFreqIndex * freqPerBucket);
 		currentLoudestTone = loudestFreq;
-		if (null == averageLoudestTone) {
+		if (null == averageLoudestTone || averageLoudestToneSamples <= 0) {
 			averageLoudestTone = loudestFreq;
+			averageLoudestToneSamples = 1;
 		} else {
-			averageLoudestTone = (loudestFreq + averageLoudestTone) / 2;
+			averageLoudestTone = (loudestFreq + (averageLoudestTone * averageLoudestToneSamples)) / (averageLoudestToneSamples + 1);
+			averageLoudestToneSamples++;
 		}
 
 		Log.i(TAG, "Loudest freq.: " + loudestFreq);
@@ -97,7 +121,7 @@ public class CalmVoiceAnalyzer implements Analyzer {
 
 	@Override
 	public synchronized String getLabel() {
-		final Boolean isCalm = isNominal();
+		final Boolean isCalm = isConditionGood();
 		return null == isCalm ? "Measuring tone..."
 				: isCalm ? ("Good Job Lance!\n("
 						+ Math.round(currentLoudestTone) + " vs "
@@ -108,7 +132,7 @@ public class CalmVoiceAnalyzer implements Analyzer {
 	}
 
 	@Override
-	public synchronized Boolean isNominal() {
+	public synchronized Boolean isConditionGood() {
 		if (null == currentLoudestTone || null == averageLoudestTone) {
 			return null;
 		}

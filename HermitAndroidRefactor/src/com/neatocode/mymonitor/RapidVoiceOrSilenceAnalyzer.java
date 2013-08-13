@@ -92,7 +92,7 @@ public class RapidVoiceOrSilenceAnalyzer implements Analyzer {
 			return "SPEAKING RAPIDLY (" + averageDelay + "ms)";
 		}
 
-		final Boolean isSpeakingReguarly = isNominal();
+		final Boolean isSpeakingReguarly = isConditionGood();
 		return null == isSpeakingReguarly ? "Measuring speaking rate..."
 				: currentTimeElapsed > 4000 ? ("LONG SILENCE ("
 						+ currentTimeElapsed + "ms)") : ("SPEAKING OK ("
@@ -100,7 +100,7 @@ public class RapidVoiceOrSilenceAnalyzer implements Analyzer {
 	}
 
 	@Override
-	public synchronized Boolean isNominal() {
+	public synchronized Boolean isConditionGood() {
 		if (null == currentTimeElapsed) {
 			return null;
 		}

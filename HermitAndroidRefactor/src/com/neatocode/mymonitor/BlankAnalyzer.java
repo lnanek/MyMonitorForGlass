@@ -23,7 +23,7 @@ public class BlankAnalyzer implements Analyzer {
 	}
 
 	@Override
-	public synchronized Boolean isNominal() {
+	public synchronized Boolean isConditionGood() {
 		return null;
 	}
 

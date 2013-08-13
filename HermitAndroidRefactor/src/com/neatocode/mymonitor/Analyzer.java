@@ -4,7 +4,7 @@ public interface Analyzer {
 
 	public String getLabel();
 
-	public Boolean isNominal();
+	public Boolean isConditionGood();
 
 	public Integer getDrawable();
 

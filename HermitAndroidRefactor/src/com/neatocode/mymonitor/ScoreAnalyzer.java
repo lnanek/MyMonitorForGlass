@@ -35,7 +35,7 @@ public class ScoreAnalyzer implements Analyzer {
 	}
 
 	@Override
-	public synchronized Boolean isNominal() {
+	public synchronized Boolean isConditionGood() {
 
 		if (null != lastDisplayedTimestamp) {
 			final long timeElapsedSinceLastDisplay = SystemClock.uptimeMillis()
@@ -68,7 +68,7 @@ public class ScoreAnalyzer implements Analyzer {
 	private synchronized void doScore(Analyzer[] analyzers) {
 		for (int i = 0; i < analyzers.length; i++) {
 			final Analyzer analyzer = analyzers[i];
-			final Boolean result = analyzer.isNominal();
+			final Boolean result = analyzer.isConditionGood();
 			if (null != result && result) {
 				score++;
 				lastDisplayedTimestamp = null;

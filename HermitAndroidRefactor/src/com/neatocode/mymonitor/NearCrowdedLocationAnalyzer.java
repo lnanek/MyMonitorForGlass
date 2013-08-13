@@ -73,7 +73,7 @@ public class NearCrowdedLocationAnalyzer implements LocationListener, Analyzer {
 
 	@Override
 	public synchronized String getLabel() {
-		final Boolean isDistant = isNominal();
+		final Boolean isDistant = isConditionGood();
 		return null == isDistant ? "Crowd check..."
 				: isDistant ? ("Good job Lance!\n("
 						+ Math.round(currentDistance) + "m)")
@@ -82,7 +82,7 @@ public class NearCrowdedLocationAnalyzer implements LocationListener, Analyzer {
 	}
 
 	@Override
-	public synchronized Boolean isNominal() {
+	public synchronized Boolean isConditionGood() {
 		if (null == currentDistance) {
 			return null;
 		}

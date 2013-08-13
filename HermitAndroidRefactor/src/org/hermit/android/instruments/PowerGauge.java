@@ -23,12 +23,13 @@ package org.hermit.android.instruments;
 import org.hermit.android.core.SurfaceRunner;
 import org.hermit.utils.CharFormatter;
 
-import com.neatocode.mymonitor.TooLoudAnalyzer;
-
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.graphics.Rect;
 import android.graphics.Paint.Style;
+import android.graphics.Rect;
+
+import com.neatocode.mymonitor.CalmVoiceAnalyzer;
+import com.neatocode.mymonitor.TooLoudAnalyzer;
 
 
 /**
@@ -256,6 +257,7 @@ public class PowerGauge
 	 */
     final void update(double power) {
     	TooLoudAnalyzer.getInstance().setPower((float) power);
+    	CalmVoiceAnalyzer.getInstance().setPower((float) power);
     	
         synchronized (this) {
             // Save the current level.  Clip it to a reasonable range.

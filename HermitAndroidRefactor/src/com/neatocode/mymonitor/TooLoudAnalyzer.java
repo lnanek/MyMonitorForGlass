@@ -11,7 +11,7 @@ public class TooLoudAnalyzer implements Analyzer {
 
 	private static final String TAG = "TooLoudAnalyzer";
 
-	private static final float TOO_LOUD = -20f;
+	private static final float TOO_LOUD = -40f;
 
 	private static TooLoudAnalyzer instance = new TooLoudAnalyzer();
 
@@ -23,7 +23,7 @@ public class TooLoudAnalyzer implements Analyzer {
 
 	@Override
 	public synchronized String getLabel() {
-		final Boolean okLoudness = isNominal();
+		final Boolean okLoudness = isConditionGood();
 		return null == okLoudness ? "Measuring loudness..."
 				: okLoudness ? ("Good Job Lance!\n("
 						+ Math.round(currentVolume) + "dB vs "
@@ -34,7 +34,7 @@ public class TooLoudAnalyzer implements Analyzer {
 	}
 
 	@Override
-	public synchronized Boolean isNominal() {
+	public synchronized Boolean isConditionGood() {
 		if (null == currentVolume) {
 			return null;
 		}

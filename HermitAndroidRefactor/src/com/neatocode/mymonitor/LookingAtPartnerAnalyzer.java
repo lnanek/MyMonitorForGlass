@@ -56,7 +56,7 @@ public class LookingAtPartnerAnalyzer implements SensorListener, Analyzer {
 
 	@Override
 	public synchronized String getLabel() {
-		final Boolean isLookingAhead = isNominal();
+		final Boolean isLookingAhead = isConditionGood();
 		return null == isLookingAhead ? "Checking eye level..."
 				: isLookingAhead ? ("Good Job Lance!\n(Gaze level: "
 						+ Math.round(verticalOrientation) + ")")
@@ -65,7 +65,7 @@ public class LookingAtPartnerAnalyzer implements SensorListener, Analyzer {
 	}
 
 	@Override
-	public synchronized Boolean isNominal() {
+	public synchronized Boolean isConditionGood() {
 		if (null == verticalOrientation) {
 			return null;
 		}

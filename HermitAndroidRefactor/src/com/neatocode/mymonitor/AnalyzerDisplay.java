@@ -60,13 +60,15 @@ public class AnalyzerDisplay {
 
 	public synchronized Analyzer[] getAnalyzers() {
 		return new Analyzer[] {
+				//LogoAnalyzer.getInstance(),
 				LookingAtPartnerAnalyzer.getOrCreateInstance(null),
 				CalmVoiceAnalyzer.getInstance(),
 				RapidVoiceOrSilenceAnalyzer.getInstance(),
 				TooLoudAnalyzer.getInstance(),
 				NearCrowdedLocationAnalyzer.getOrCreateInstance(null),
 				ScoreAnalyzer.getInstance(), BrightnessAnalyzer.getInstance(),
-				BlankAnalyzer.getInstance(), };
+				BlankAnalyzer.getInstance(), 
+				};
 	}
 
 	public synchronized void onTouchUp() {
@@ -110,8 +112,8 @@ public class AnalyzerDisplay {
 		for (int i = 0; i < analyzers.length; i++) {
 			Log.i(TAG, "doDraw checking for analyzer to show");
 			final Analyzer analyzer = analyzers[i];
-			final Boolean result = analyzer.isNominal();
-			if (null != result && !result) {
+			final Boolean isConditionGood = analyzer.isConditionGood();
+			if (null != isConditionGood && !isConditionGood) {
 				Log.i(TAG, "showing analyzer: "
 						+ analyzer.getClass().getSimpleName());
 				drawAnalyzer(canvas, rect, analyzer, true);
@@ -132,7 +134,7 @@ public class AnalyzerDisplay {
 		}
 
 		final String label = analyzer.getLabel();
-		final Boolean result = analyzer.isNominal();
+		final Boolean result = analyzer.isConditionGood();
 		if (!skipColor && null != result) {
 			Paint color = result ? greenPaint : redPaint;
 			canvas.drawRect(rect, color);

@@ -53,8 +53,8 @@ public class BrightnessAnalyzer implements SensorListener, Analyzer {
 
 	@Override
 	public synchronized String getLabel() {
-		final Boolean isBright = isNominal();
-		return null == isBright ? "Checking brightness..."
+		final Boolean isBright = isConditionGood();
+		return null == isBright ? "Checking brightness...\n(coming soon)"
 				: isBright ? ("Good Job Lance!\n(Brightness "
 						+ Math.round(brightness) + " lux)")
 						: ("It might be bright outside.\n(Brightness "
@@ -62,7 +62,7 @@ public class BrightnessAnalyzer implements SensorListener, Analyzer {
 	}
 
 	@Override
-	public synchronized Boolean isNominal() {
+	public synchronized Boolean isConditionGood() {
 		if (null == brightness) {
 			return null;
 		}
